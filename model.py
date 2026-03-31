@@ -15,8 +15,10 @@ class CSRNet(nn.Module):
         if not load_weights:
             mod = models.vgg16(pretrained = True)
             self._initialize_weights()
-            for i in xrange(len(self.frontend.state_dict().items())):
-                self.frontend.state_dict().items()[i][1].data[:] = mod.state_dict().items()[i][1].data[:]
+            frontend_items = list(self.frontend.state_dict().items())
+            mod_items = list(mod.state_dict().items())
+            for i in range(len(frontend_items)):
+                frontend_items[i][1].data[:] = mod_items[i][1].data[:]
     def forward(self,x):
         x = self.frontend(x)
         x = self.backend(x)
