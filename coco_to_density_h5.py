@@ -17,7 +17,7 @@ Example:
     --coco-json ..\\TenebrioVision_Annotations.json \
     --images-dir ..\\TenebrioVision_Images \
     --output-dir ..\\ground_truth \
-    --sigma-mode adaptive
+        --sigma-mode fixed --sigma 8.0
 
 """
 
@@ -262,8 +262,8 @@ def main() -> int:
     parser.add_argument(
         "--sigma-mode",
         choices=["fixed", "adaptive"],
-        default="adaptive",
-        help="How to choose Gaussian spread (default: adaptive)",
+        default="fixed",
+        help="How to choose Gaussian spread (default: fixed)",
     )
     parser.add_argument("--sigma", type=float, default=8.0, help="Fixed sigma (only used when --sigma-mode fixed)")
     parser.add_argument("--min-sigma", type=float, default=2.0, help="Clamp minimum sigma in adaptive mode")
