@@ -17,6 +17,18 @@ CUDA: 9.2
 
 Please follow the `make_dataset.ipynb ` to generate the ground truth. It shall take some time to generate the dynamic ground truth. Note you need to generate your own json file.
 
+### COCO (TenebrioVision) -> CSRNet density maps
+
+If your annotations are in COCO format (e.g., TenebrioVision), you can generate CSRNet-style `.h5` density maps with:
+
+`python CSRNet-pytorch/coco_to_density_h5.py --coco-json TenebrioVision_Annotations.json --images-dir TenebrioVision_Images --output-dir ground_truth --sigma-mode adaptive`
+
+This writes one `.h5` per image into `ground_truth/` (dataset name: `density`). The density map pixel-sum is normalized to equal the number of larvae instances for that image.
+
+Dependencies: `numpy`, `pillow`, `scipy`, `h5py`.
+
+Note: The loader in this repo supports `.png` images and will look for matching `.h5` files in a sibling `ground_truth/` folder.
+
 ## Training Process
 
 Try `python train.py train.json val.json 0 0` to start training process.

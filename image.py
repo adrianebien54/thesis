@@ -5,9 +5,25 @@ import numpy as np
 import h5py
 from PIL import ImageStat
 import cv2
+from pathlib import Path
 
 def load_data(img_path,train = True):
+    # Backward-compatible default (ShanghaiTech layout):
     gt_path = img_path.replace('.jpg','.h5').replace('images','ground_truth')
+
+    # Fallbacks for other datasets (e.g., .png images or different folder names).
+    # We try a small set of common layouts and pick the first existing file.
+    p = Path(img_path)
+    candidates = [
+        Path(gt_path),
+        p.with_suffix('.h5'),
+        p.parent.parent / 'ground_truth' / (p.stem + '.h5'),
+    ]
+    for cand in candidates:
+        if cand.exists():
+            gt_path = str(cand)
+            break
+
     img = Image.open(img_path).convert('RGB')
     gt_file = h5py.File(gt_path)
     target = np.asarray(gt_file['density'])
